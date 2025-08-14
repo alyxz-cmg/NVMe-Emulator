@@ -26,6 +26,11 @@ public:
 
         free_blocks_--;
         l2p_table_[lba] = 1;
+        
+        int latency = 100;
+        if (free_blocks_ < capacity_ * 0.05) {
+            latency += trigger_gc(metrics);
+        }
 
         return 100;
     }
@@ -46,5 +51,16 @@ private:
     uint32_t capacity_;
     int32_t free_blocks_;
     std::vector<uint32_t> l2p_table_;
+
+    uint64_t trigger_gc(SystemMetrics& metrics) {
+        metrics.gc_events++;
+
+        uint64_t pages_moved = capacity_ * 0.02;
+        metrics.flash_writes += pages_moved;
+
+        free_blocks_ += capacity_ * 0.10;
+
+        return pages_moved * 100 + 1500;
+    }
 };
 }
