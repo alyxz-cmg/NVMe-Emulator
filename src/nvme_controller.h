@@ -3,6 +3,7 @@
 #include "nvme_types.h"
 #include "ftl_backend.h"
 #include <deque>
+#include <optional>
 
 namespace NvmeSim {
 
@@ -14,7 +15,7 @@ public:
     CommandStatus submit_command(const NvmeCmd& cmd, SystemMetrics& m) {
         if (sq_.size() >= depth_) {
             m.backpressure_events++;
-            
+
             return CommandStatus::QUEUE_FULL;
         }
 
@@ -23,9 +24,13 @@ public:
         return CommandStatus::SUCCESS;
     }
 
+    std::optional<NvmeCqe> poll_completion();
+    bool process_step(uint64_t& time, SystemMetrics& m);
+
 private:
     uint32_t depth_;
     std::deque<NvmeCmd> sq_;
+    std::deque<NvmeCqe> cq_;
     FtlBackend ftl_;
 };
 }
