@@ -74,5 +74,7 @@ int main() {
 
     run_workload(ctrl, "Sequential Reads", 100000, 0.0, false);
 
+    run_workload(ctrl, "Random 70% Writes", 100000, 0.70, true);
+    
     return 0;
 }
