@@ -121,14 +121,6 @@ g++ src/*.cpp -o nvme_sim -O2
 
 ---
 
-## Project Goals
-This project is designed to demonstrate:
-* Understanding of NVMe architecture
-* Firmware-level storage system design
-* Flash memory constraints and abstractions
-* Performance modeling and system metrics tracking
-* Event-driven simulation of storage pipelines
-
 ## Future Improvements
 Planned extensions include:
 * Parallel submission queues (multi-core simulation)
